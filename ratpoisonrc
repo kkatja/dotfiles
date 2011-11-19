@@ -1,0 +1,38 @@
+unbind c
+bind c exec xterm -bg black -fg white
+
+escape Super_L
+definekey top Super_L readkey root
+
+#Workspaces
+exec rpws -i
+exec /usr/bin/rpws init 6 -k
+bind F1 exec rpws 1
+bind F2 exec rpws 2
+bind F3 exec rpws 3
+bind F4 exec rpws 4
+
+exec ratpoison -c 'rudeness 5'
+exec ratpoison -c 'set border 0'
+
+unbind q
+bind q delete
+unbind f
+bind f exec vimprobable &
+unbind j
+unbind k
+unbind l
+unbind h
+bind h focusleft
+bind j focusdown
+bind k focusup
+bind l focusright
+
+unbind Up
+bind Up exchangeup
+unbind Down
+bind Down exchangedown
+unbind Left
+bind Left exchangeleft
+unbind Right
+bind Right exchangeright
