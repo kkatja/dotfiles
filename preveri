@@ -1,0 +1,51 @@
+#! /bin/bash
+## Za mojo referenco - link na ta file je v $HOME/.cronjobs - popravi ce ga kakorkoli preimenujes
+
+# Najprej je en kup testov
+
+# V $HOME naredimo direktorij, v katerem so shranjni stanje in fajli za primerjavo.
+cd $HOME
+if [[ "$PWD" != "$HOME" ]]
+then echo "Cannot cd to $HOME"
+fi
+if [[ ! -e .termodinamika ]]
+then mkdir .termodinamika
+fi
+if [[ ! -w .termodinamika ]]
+then echo "Prislo je do napake pri poskusu pisanja v folder. Preveri permissions"
+fi
+cd .termodinamika
+# Ce  je skripta ze enkrat (v preteklosti) nasla posodobitev, ta file ne sme vec biti prepisan.
+touch stanje.rez
+ZAC=$(cat stanje.rez)
+if [[ $ZAC == "MOGOCE SO ZE REZULTATI" ]]
+then exit
+fi
+
+# To je narejeno samo zato, ker pri wget-u nisem uporabila -o moznosti :-) 
+if [[ -e "std.html.1" ]]
+then rm std.html.1
+fi
+
+# Predvidevam, da bodo tukaj objavljeni rezultati
+wget -q http://www.fiz.uni-lj.si/lcgroup/sola/std.html
+
+# Ce se to zgodi, pomeni da je najverjetneje prislo do napake pri wgetanju
+if [[ ! -e "std.html" ]]
+then echo "Prislo je do napake, poglej, kaj se dogaja" > stanje.rez && exit
+fi
+
+# Najverjetneje se je skripta izvajala prvic
+if [[ ! -e "std.html.1" ]]
+then echo "Nimam nicesar za primerjat" > stanje.rez && exit
+fi
+
+# Ce je med fajloma ni razlike, bo dolzina outputa diff ukaza enaka 0, sicer pa obstaja moznost,
+#da je asisten ze objavil rezultate :-)
+POM=$(diff std.html.1 std.html)
+LEN=${#POM}
+if [[ "$LEN" == 0 ]]
+then echo 'Ni spremembe' > stanje.rez
+else echo 'MOGOCE SO ZE REZULTATI' > stanje.rez
+fi
+mv std.html.1 std.html
