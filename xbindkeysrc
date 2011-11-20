@@ -1,0 +1,32 @@
+"xte 'mouseclick 2'"
+    m:0x1 + c:118
+        Shift + Insert
+
+#Decrease volume
+"amixer set Master playback 1-"
+m:0x0 + c:122
+XF86AudioLowerVolume
+
+#Increase volume
+"amixer set Master playback 1+"
+m:0x0 + c:123
+XF86AudioRaiseVolume
+
+#Toggle between play/pause  - mocp
+"mocp -G"
+m:0x0 + c:172
+XF86AudioPlay
+
+#Stop plaxing from the server - mocp
+"mocp -s"
+m:0x0 + c:174
+XF86AudioStop
+
+#Play previous from the playlist - mocp
+"mocp -r"
+m:0x0 + c:173
+XF86AudioPrev
+#Play next from the playlist - mocp
+"mocp -f"
+m:0x0 + c:171
+XF86AudioNext
